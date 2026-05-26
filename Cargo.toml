@@ -1,0 +1,21 @@
+[package]
+name = "xmlangee"
+version = "1.0.0"
+authors = ["GamelineYT"]
+edition = "2021"
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+xmltree = "0.10.3"
+thiserror = "1.0.40"
+substring = "1.4.5" # UTF-8 is hard
+rand = "0.8.5"
+radix_fmt = "1.0.0"

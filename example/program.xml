@@ -1,0 +1,10 @@
+<program>
+    <import id="!std" />
+    <call id="println">
+        <call id="range">
+            <int>10</int>
+            <int>0</int>
+            <int>1</int>
+        </call>
+    </call>
+</program>
