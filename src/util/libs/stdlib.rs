@@ -18,14 +18,19 @@ use super::make_func;
 pub fn get(state: &mut Interpreter) {
     make_func!(
         state;
+        //* Print function */
         (1) "print" => |values| {
             print!("{}", values[0]);
             Ok(None)
         };
+
+        //* Print a newline aswell */
         (1) "println" => |values| {
             println!("{}", values[0]);
             Ok(None)
         };
+
+        //* Function to flush the standart output */
         (0) "flush" => |_| {
             if let Err(_) = io::stdout().flush() {
                 return Err(LangError::RuntimeError(
@@ -34,6 +39,8 @@ pub fn get(state: &mut Interpreter) {
             }
             Ok(None)
         };
+
+        //* Iterate over a range, similar to python's "for i in range" */
         (3) "range" => |values| {
             if let (Value::Integer(mut a), Value::Integer(mut b), Value::Integer(mut step))
                 = (&values[0], &values[1], &values[2]) {
@@ -59,6 +66,8 @@ pub fn get(state: &mut Interpreter) {
                 ))
             }
         };
+
+        //* Simple array joining function */
         (1) "join" => |values| {
             if let Value::Array(arr) = &values[0] {
                 let mut out = String::new();
@@ -71,7 +80,19 @@ pub fn get(state: &mut Interpreter) {
                 "Expected array to join".into()
             ))
         };
-        (1) "len" => |values| {
+
+        //* Simple text splitting function */
+        (2) "split" => |values| {
+                if let (Value::String(s), Value::String(delim)) = (&values[0], &values[1]) {
+                    let parts: Vec<Value> = s.split(delim).map(|part| Value::String(part.to_string())).collect();
+                    Ok(Some(Value::Array(parts)))
+                } else {
+                    Err(LangError::RuntimeError("Expected two strings: string to split and delimiter".into()))
+                }
+            };
+
+        //* Get the lenght of a given iterable */
+        (1) "len" => |values| { 
             return Ok(Some(Value::Integer(Wrapping(
                 match &values[0] {
                     Value::Array(arr) => arr.len() as i64,
@@ -86,6 +107,8 @@ pub fn get(state: &mut Interpreter) {
                 }
             ))))
         };
+
+        //*Recieve input from standart input */
         (0) "input" => |_| {
             let io = io::stdin();
             let mut out = String::new();
@@ -98,6 +121,8 @@ pub fn get(state: &mut Interpreter) {
                 ))
             }
         };
+
+        //* Turn a ASCII int into a character */
         (1) "chr" => |args| {
             if let Value::Integer(i) = args[0] {
                 if i.0 < 0 {
@@ -113,6 +138,8 @@ pub fn get(state: &mut Interpreter) {
                 return Err(LangError::RuntimeError("Expected integer for call to chr".into()));
             }
         };
+
+        //* Turn a character into a codepoint number */
         (1) "ord" => |args| {
             if let Value::String(s) = &args[0] {
                 if s.chars().count() == 1 {
@@ -127,6 +154,8 @@ pub fn get(state: &mut Interpreter) {
                 return Err(LangError::RuntimeError("Expected string for call to ord".into()));
             }
         };
+
+        //* Base conversion function */
         (2) "radix" => |args| {
             if let Value::Integer(b) = &args[1] {
                 if !(2..=36).contains(&b.0) {
@@ -154,6 +183,8 @@ pub fn get(state: &mut Interpreter) {
                 return Err(LangError::RuntimeError("Expected an integer for base of radix".into()));
             }
         };
+
+        //* Sleep function */
         (1) "sleep" => |args| {
             let t: Duration;
             if let Value::Integer(i) = args[0] {
@@ -171,12 +202,16 @@ pub fn get(state: &mut Interpreter) {
             thread::sleep(t);
             Ok(None)
         };
+
+        //* Get UNIX timestamp */
         (0) "time" => |_| {
             let t = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).map_err(
                 |_| LangError::RuntimeError("Current system time is before unix epoch (???)".into())
             )?;
             Ok(Some(Value::Float(HashableFloat(t.as_secs_f64()))))
         };
+
+        //* Get a given variable type */
         (1) "type" => |args| {
             Ok(Some(Value::String(match &args[0] {
                 Value::Integer(_) => "int",
@@ -192,6 +227,10 @@ pub fn get(state: &mut Interpreter) {
                 Value::Continue => "continue"
             }.into())))
         };
+
+        //* Get a hash value of a input 
+        //*! (this is NOT a cryptographic hash) 
+    
         (1) "hash" => |args| {
             let mut hasher = DefaultHasher::new();
             args[0].hash(&mut hasher);
