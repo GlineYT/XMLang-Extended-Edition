@@ -1,0 +1,44 @@
+<program>
+    <!-- Import standart library -->
+    <import id="!std"/>
+
+
+    <!-- Create the array -->    
+    <assign id="fruits" >
+        <arr>
+        <str>apple</str>
+        <str>banana</str>
+        <str>cherry</str>
+        <str>date</str>
+        </arr>
+    </assign>
+
+
+    <!-- Create the variable to hold the result -->
+    <assign id="split_result">
+        <!-- call the function with the array to be split and the index -->
+        <call id="split_at">
+            <access id="fruits" />
+            <int>2</int>
+        </call>
+    </assign>
+
+    <!-- Assign the left half -->
+    <assign id="left_half">
+            <access id="split_result"><int>0</int></access>
+    </assign>
+
+    <!-- And the right half -->
+    <assign id="right_half">    
+        <access id="split_result"><int>1</int></access>
+    </assign>
+
+    <!-- Print the left and right half -->
+
+    <call id="print"><str>LEFT HALF:</str></call>
+    <call id="print"><access id="left_half" /></call>
+
+    <call id="print"><str>RIGHT HALF:</str></call>
+    <call id="print"><access id="right_half" /></call>
+
+</program>

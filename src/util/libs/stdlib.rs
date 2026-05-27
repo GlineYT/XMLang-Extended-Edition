@@ -90,6 +90,26 @@ pub fn get(state: &mut Interpreter) {
                     Err(LangError::RuntimeError("Expected two strings: string to split and delimiter".into()))
                 }
             };
+        
+        //* Array splitting */
+            (2) "split_at" => |values| {
+                if let (Value::Array(arr), Value::Integer(index)) = (&values[0], &values[1]) {
+                    let idx = index.0 as usize;
+                    if idx > arr.len() {
+                        return Err(LangError::RuntimeError(
+                            format!("Split index {} out of bounds (len {})", idx, arr.len())
+                        ));
+                    }
+                    let left = Value::Array(arr[0..idx].to_vec());
+                    let right = Value::Array(arr[idx..].to_vec());
+                    let result = Value::Array(vec![left, right]);
+                    Ok(Some(result))
+                } else {
+                    Err(LangError::RuntimeError(
+                        "Expected array and integer index".into()
+                    ))
+                }
+            };
 
         //* Get the lenght of a given iterable */
         (1) "len" => |values| { 
