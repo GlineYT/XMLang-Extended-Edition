@@ -111,6 +111,28 @@ pub fn get(state: &mut Interpreter) {
                 }
             };
 
+        //* Substrings */
+        (3) "substr" => |args| {
+            if let (Value::String(s), Value::Integer(start), Value::Integer(end)) = (&args[0], &args[1], &args[2]) {
+                let s_len = s.chars().count();
+                let start_idx = start.0 as usize;
+                let end_idx = end.0 as usize;
+                
+                if start_idx > s_len || end_idx > s_len || start_idx > end_idx {
+                    return Err(LangError::RuntimeError(
+                        format!("Invalid substring bounds: start={}, end={}, len={}", start_idx, end_idx, s_len)
+                    ));
+                }
+                
+                let result: String = s.chars().skip(start_idx).take(end_idx - start_idx).collect();
+                Ok(Some(Value::String(result)))
+            } else {
+                Err(LangError::RuntimeError(
+                    "Expected string and two integers (start, end)".into()
+                ))
+            }
+        };
+
         //* Get the lenght of a given iterable */
         (1) "len" => |values| { 
             return Ok(Some(Value::Integer(Wrapping(
@@ -130,17 +152,17 @@ pub fn get(state: &mut Interpreter) {
 
         //*Recieve input from standart input */
         (0) "input" => |_| {
-            let io = io::stdin();
-            let mut out = String::new();
-            match io.read_line(&mut out) {
-                Ok(_) => {
-                   Ok(Some(Value::String(out[0..out.len()-1].into()))) // Strip newline
-                },
-                Err(e) => Err(LangError::RuntimeError(
-                    format!("Error reading input: {}", e).into()
-                ))
-            }
-        };
+                let mut out = String::new();
+                match io::stdin().read_line(&mut out) {
+                    Ok(_) => {
+                        let trimmed = out.trim().to_string();
+                        Ok(Some(Value::String(trimmed)))
+                    },
+                    Err(e) => Err(LangError::RuntimeError(
+                        format!("Error reading input: {}", e).into()
+                    ))
+                }
+            };
 
         //* Turn a ASCII int into a character */
         (1) "chr" => |args| {

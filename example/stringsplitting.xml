@@ -1,0 +1,20 @@
+<program>
+<!-- Example usage of the string splitting function. Will produce a array at the end -->
+<!-- Can be used together with splitat for array splitting and further processing -->
+
+
+<!-- Import the standart library -->
+<import id="!std"/>
+
+<assign id="example">
+    <!-- Call the split function -->
+    <call id="split">
+        <str>one,two,three</str> <!-- The string to split -->
+        <str>,</str> <!-- the delimiter to split by -->
+    </call>
+</assign>
+
+
+<call id="println"><access id="example" /></call>
+
+</program>

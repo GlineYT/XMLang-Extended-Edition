@@ -1,0 +1,24 @@
+<program>
+<!-- Import the standart library -->
+<import id="!std"/>
+
+<!-- Define a function -->
+<func id="function">
+    <args> <!-- If the function accepts arguments/parameters, a "args" block must be defined -->
+        <arg  id="argument" ><str></str></arg> <!-- Any acceptable arguments go inside their arg tag -->
+    </args>
+    
+    <!-- The second child is a block tag, in which code to be executed is placed -->
+    <block>
+            <call id="println" ><access id="argument"/></call> <!-- Call the println function and pass the argument defined above -->
+    </block>
+
+
+</func>
+
+<!-- Call the function with the passed parameter -->
+<call id="function">
+    <str>Hi. This is from a defined function</str>
+</call>
+
+</program>

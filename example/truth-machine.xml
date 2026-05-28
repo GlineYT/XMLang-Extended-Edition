@@ -1,0 +1,39 @@
+<program>
+    <import id="!std" />
+    <while>
+        <bool>true</bool>
+        <try>
+            <block>
+                <assign id="n">
+                    <int>
+                        <call id="input" />
+                    </int>
+                </assign>
+                <break />
+            </block>
+            <continue />
+        </try>
+    </while>
+    <if>
+        <eq>
+            <access id="n" />
+            <int>0</int>
+        </eq>
+        <call id="println">
+            <str>0</str>
+        </call>
+        <eq>
+            <access id="n" />
+            <int>1</int>
+        </eq>
+        <while>
+            <bool>true</bool>
+            <call id="println">
+                <str>1</str>
+            </call>
+        </while>
+        <call id="println">
+            <str>Not 0 or 1</str>
+        </call>
+    </if>
+</program>

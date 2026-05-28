@@ -1,0 +1,76 @@
+<program>
+    <import id="!std" />
+    <!-- Calculator function -->
+    <func id="calculator">
+
+    <!-- Argument block -->
+    <args>
+        <arg id="operator" />
+        <arg id="a" />
+        <arg id="b" />
+    </args>
+
+    <!-- Execution block -->
+    <block>
+        <!-- Default result -->
+        <assign id="result">
+            <str>Unknown operation</str>
+        </assign>
+        <!-- If/else collection -->
+         <!-- Multiple pairs work like a if/elif/else condition in python -->
+        <if>
+             <!-- add pair -->
+            <eq><access id="operator" /><str>add</str></eq>
+            <assign id="result"><add><access id="a" /><access id="b" /></add></assign>
+            
+            <!-- sub pair -->
+            <eq><access id="operator" /><str>sub</str></eq>
+            <assign id="result"><sub><access id="a" /><access id="b" /></sub></assign>
+            
+            <!-- mul pair -->
+            <eq><access id="operator" /><str>mul</str></eq>
+            <assign id="result"><mul><access id="a" /><access id="b" /></mul></assign>
+            
+            <!-- div pair -->
+            <eq><access id="operator" /><str>div</str></eq>
+            <assign id="result"><div><access id="a" /><access id="b" /></div></assign>
+            
+            <!-- else (odd number of children total) -->
+            <assign id="result"><str>Unknown operation</str></assign>
+        </if>
+
+        <!--  ⚠️ Important: The <if> tag evaluates condition-expression pairs in order
+         and returns the first matching expression. Do NOT use multiple separate <if> tags
+         they will cause the function to return early. 
+         Instead, use one <if> with multiple condition-expression pairs, 
+         optionally ending with an else expression.-->
+
+        <access id="result" />  
+    </block>
+</func>
+  
+    
+  <call id="println"><str>What operation? (add, sub, mul, div)</str></call>
+    <assign id="op"><call id="input" /></assign>
+    
+    <call id="println"><str>First number?</str></call>
+    <assign id="a_str"><call id="input" /></assign>
+    <assign id="a"><call id="radix"><access id="a_str" /><int>10</int></call></assign>
+    
+    <call id="println"><str>Second number?</str></call>
+    <assign id="b_str"><call id="input" /></assign>
+    <assign id="b"><call id="radix"><access id="b_str" /><int>10</int></call></assign>
+    
+    <!-- Call calculator -->
+    <assign id="calc_result">
+        <call id="calculator">
+            <access id="op" />
+            <access id="a" />
+            <access id="b" />
+        </call>
+    </assign>
+    
+    <!-- Output result -->
+    <call id="print"><str>Result: </str></call>
+    <call id="println"><access id="calc_result" /></call>
+</program>

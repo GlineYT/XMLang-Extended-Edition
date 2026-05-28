@@ -1,0 +1,41 @@
+<program>
+    <import id="!std" />
+    <import id="!rand" />
+    
+    <assign id="my_guid">
+        <call id="guid" />
+    </assign>
+    <call id="println">
+        <add><str>GUID: </str><access id="my_guid" /></add>
+    </call>
+    
+    <assign id="hex16">
+        <call id="rand_str">
+            <int>16</int>
+            <int>16</int>
+        </call>
+    </assign>
+    <call id="println">
+        <add><str>Hex (16): </str><access id="hex16" /></add>
+    </call>
+    
+    <assign id="binary8">
+        <call id="rand_str">
+            <int>8</int>
+            <int>2</int>
+        </call>
+    </assign>
+    <call id="println">
+        <add><str>Binary (8): </str><access id="binary8" /></add>
+    </call>
+    
+    <assign id="alnum12">
+        <call id="rand_str">
+            <int>12</int>
+            <int>36</int>
+        </call>
+    </assign>
+    <call id="println">
+        <add><str>Base36 (12): </str><access id="alnum12" /></add>
+    </call>
+</program>

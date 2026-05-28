@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceRoot}/target/debug/xmlang-ee",
+            "args": ["/home/kingmarkoxiv/Desktop/UKTC/other_files/randomcode/XMLangEE/example/calculator.xml"],
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+<program>
+<!-- Import the standart library -->
+<import id="!std" />
+
+<!-- Assign the variable as the substring of the given string -->
+<assign id="result">
+    <call id="substr">
+        <!-- Note that position of the arguments matters. Out of range or reversed arguments will error -->
+        <!-- If the start is equal to the end, it will produce a empty string -->
+        <str>thisisxmlangee</str> <!-- String to substring -->
+        <int>2</int> <!-- Position to begin from -->
+        <int>6</int> <!-- Position to end before. Exclusive, if it is less than the start, it will produce a error -->
+    </call>
+</assign>
+<!-- result = "isis" -->
+
+<call id="println">
+    <access id="result"/>
+</call>
+</program>
