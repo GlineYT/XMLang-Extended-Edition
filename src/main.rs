@@ -80,7 +80,7 @@ fn main() -> Result<(), ()> {
     if let Some(p) = cli_args.next() {
         program_path = PathBuf::from(p);
     } else {
-        println!("XMLangEE Interpreter (https://esolangs.org/wiki/XMLang)
+        println!("XMLangEE Interpreter (https://github.com/GlineYT/XMLangEE)
 Usage: <path> [arg1] [arg2] [arg3]...");
         return Ok(());
     }
