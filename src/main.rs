@@ -84,6 +84,18 @@ fn main() -> Result<(), ()> {
 Usage: <path> [arg1] [arg2] [arg3]...");
         return Ok(());
     }
+    
+    // File extension advisory note
+    if let Some(ext) = program_path.extension() {
+        let ext_str = ext.to_string_lossy();
+        if ext_str != "xee" && ext_str != "xml" {
+            eprintln!("Note: File extension '.{}' is not standard for XMLangEE. Expected .xee or .xml", ext_str);
+            eprintln!("      The program will still attempt to run, but consider using .xee for XMLangEE files.");
+        }
+    } else {
+        eprintln!("Note: File has no extension. Consider using .xee for XMLangEE files.");
+    }
+    
     let args: Vec<String> = cli_args.collect();
     let raw_program = match std::fs::read_to_string(&program_path) {
         Ok(s) => s,

@@ -1,7 +1,8 @@
-pub mod stdlib; //* Referring to XMLangEE's stdlib */
-pub mod randlib;//* XMLangEE's randlib */
-pub mod mathlib;//* XMLangEE's mathlib */
-pub mod iolib;//* XMLangEE's iolib */
+pub mod stdlib; //* Referring to XMLangEE's stdlib - contains standart library functions */
+pub mod randlib;//* XMLangEE's randlib - contains utilities for random number generation */
+pub mod mathlib;//* XMLangEE's mathlib - contains mathemathical functions and operations */
+pub mod iolib;//* XMLangEE's iolib - contains functions for file I/O */
+pub mod cryptolib; //*XMLangEE's cryptolib - contains cryptographic hash functions    */
 
 
 //? Supers
@@ -18,6 +19,7 @@ pub fn import(name: &str, state: &mut Interpreter) -> Result<(), LangError> {
         "rand" => randlib::get(state),
         "math" => mathlib::get(state),
         "io" => iolib::get(state),
+        "crypto" => cryptolib::get(state),
         name => {
             return Err(
                 LangError::RuntimeError(format!("No built-in lib {name}"))

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Root: only <program> at top level -->
+    <xs:element name="program">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Variables -->
+    <xs:element name="assign">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="access">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="delete">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Types -->
+    <xs:element name="int">
+        <xs:complexType mixed="true">
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="float">
+        <xs:complexType mixed="true">
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bool">
+        <xs:complexType mixed="true">
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="str">
+        <xs:complexType mixed="true">
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="null">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Data structures -->
+    <xs:element name="arr">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="dict">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="pair" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pair">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="2" maxOccurs="2"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="set">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Binary operators (all take exactly 2 children) -->
+    <xs:element name="add">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="2" maxOccurs="2"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="sub"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="mul"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="div"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="pow"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="and"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="or"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="xor"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="shl"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="shr"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="mod"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+
+    <!-- Comparison operators -->
+    <xs:element name="eq"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="ne"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="lt"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="gt"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="leq"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+    <xs:element name="geq"><xs:complexType><xs:sequence><xs:any minOccurs="2" maxOccurs="2"/></xs:sequence></xs:complexType></xs:element>
+
+    <!-- Unary operators -->
+    <xs:element name="not">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="abs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="neg">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Semantic -->
+    <xs:element name="args">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="arg" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="arg">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="block">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="call">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Control Flow -->
+    <xs:element name="func">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="args"/>
+                <xs:element name="block"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="if">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="for">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="2" maxOccurs="2"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="while">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="2" maxOccurs="2"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="break">
+        <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="continue">
+        <xs:complexType/>
+    </xs:element>
+
+    <xs:element name="return">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="import">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="public">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Error handling -->
+    <xs:element name="try">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:any minOccurs="2" maxOccurs="2"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

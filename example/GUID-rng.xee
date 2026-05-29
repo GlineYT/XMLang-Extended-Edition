@@ -22,7 +22,7 @@
     <assign id="binary8">
         <call id="rand_str">
             <int>8</int>
-            <int>2</int>
+            <int>2</int>    
         </call>
     </assign>
     <call id="println">
@@ -38,4 +38,6 @@
     <call id="println">
         <add><str>Base36 (12): </str><access id="alnum12" /></add>
     </call>
+
+
 </program>

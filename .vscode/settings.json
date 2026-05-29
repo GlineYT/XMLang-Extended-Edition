@@ -1,0 +1,11 @@
+{
+    "xml.fileAssociations": [
+        {
+            "pattern": "**/*.xee",
+            "systemId": "./xmlang-ee.xsd"
+        }
+    ],
+    "files.associations": {
+        "*.xee": "xml"
+    }
+}
