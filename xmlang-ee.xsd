@@ -199,11 +199,11 @@
     </xs:element>
 
     <xs:element name="if">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:any minOccurs="1" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
+    <xs:complexType>
+        <xs:sequence>
+            <xs:any minOccurs="1" maxOccurs="unbounded" processContents="skip"/>
+        </xs:sequence>
+    </xs:complexType>
     </xs:element>
 
     <xs:element name="for">

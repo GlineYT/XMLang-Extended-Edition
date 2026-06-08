@@ -81,6 +81,17 @@ pub fn get(state: &mut Interpreter) {
             ))
         };
 
+        //* Array concatenations */
+    (2) "concat" => |values| {
+        if let (Value::Array(arr1), Value::Array(arr2)) = (&values[0], &values[1]) {
+            let mut result = arr1.clone();
+            result.extend(arr2.clone());
+            Ok(Some(Value::Array(result)))
+        } else {
+            Err(LangError::RuntimeError("Expected two arrays".into()))
+        }
+    };
+
         //* Simple text splitting function */
         (2) "split" => |values| {
                 if let (Value::String(s), Value::String(delim)) = (&values[0], &values[1]) {

@@ -5,73 +5,7 @@ use util::structures::*;
 use std::env;
 use std::path::PathBuf;
 
-/* Yahtzee roll
-<program>
-    <!-- Simple yahtzee roll, no score counting -->
-    <import id="[std]" />
-    <import id="[random]" />
-    <func id="roll">
-        <args />
-        <block>
-            <assign id="dice">
-                <arr>
-                    <null />
-                    <null />
-                    <null />
-                    <null />
-                    <null />
-                </arr>
-            </assign>
-            <for>
-                <assign id="i">
-                    <int>0</int>
-                </assign>
-                <block>
-                    <lt>
-                        <access id="i" />
-                        <int>5</int>
-                    </lt>
-                </block>
-                <block>
-                    <assign id="i">
-                        <add>
-                            <access id="i" />
-                            <int>1</int>
-                        </add>
-                    </assign>
-                </block>
-                <block>
-                    <assign id="dice">
-                        <access id="i" />
-                        <add>
-                            <int>
-                                <mul>
-                                    <call id="rand" />
-                                    <int>6</int>
-                                </mul>
-                            </int>
-                            <int>1</int>
-                        </add>
-                    </assign>
-                </block>
-            </for>
-            <return>
-                <access id="dice" />
-            </return>
-        </block>
-    </func>
-    <call id="print">
-        <str>Rolling...</str>
-    </call>
-    <assign id="rolled-dice">
-        <call id="roll" />
-    </assign>
-    <call id="print">
-        <access id="rolled-dice" />
-        <str>&#10;Done!</str>
-    </call>
-</program>
-*/
+
 
 fn main() -> Result<(), ()> {
     let mut cli_args = env::args();
