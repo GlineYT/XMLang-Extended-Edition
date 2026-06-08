@@ -434,8 +434,12 @@ pub fn run(tree: &NodeArena, state: &mut Interpreter) -> Result<Option<Value>, L
             for i in 0..root.children.len() {
                 args.push(run(&tree.subtree(root.children[i]), state)?.unwrap_or(Value::Null));
             }
+            
             let func;
+            let func_name: String; 
+            
             if let Some(f) = fnc {
+                func_name = f.clone();  
                 func = state.variables.get(f).cloned().ok_or(
                     LangError::RuntimeError(
                         format!("Tried to call non-existent function {f}")
@@ -447,14 +451,18 @@ pub fn run(tree: &NodeArena, state: &mut Interpreter) -> Result<Option<Value>, L
                         "Tried to call with no function specified".into()
                     ))
                 }
+                func_name = "<anonymous>".into(); 
                 func = args.remove(0);
             }
+            
             if let Value::Function(arg_names, body) = func {
                 let mut state = state.clone();
                 if args.len() != arg_names.len() {
+                    // IMPROVED: now includes function name and counts
                     return Err(LangError::RuntimeError(
-                        "Wrong number of arguments for call".into()
-                    ))
+                        format!("Function '{}' expected {} argument(s), got {}", 
+                                func_name, arg_names.len(), args.len())
+                    ));
                 }
                 for (arg, name) in args.iter().zip(arg_names.iter()) {
                     state.variables.insert(name.clone(), arg.clone());
@@ -465,10 +473,11 @@ pub fn run(tree: &NodeArena, state: &mut Interpreter) -> Result<Option<Value>, L
                 } 
             } else {
                 return Err(LangError::RuntimeError(
-                    "Can't call a non-function".into()
-                ))
+                    format!("'{}' is not a function", func_name) 
+                ));
             }
         },
+
         NodeKind::Function(name) => {
             if root.children.len() != 2 {
                 return Err(LangError::RuntimeError(
