@@ -67,7 +67,7 @@ pub fn get(state: &mut Interpreter) {
             }
         };
 
-        //* Simple array joining function */
+        //* Turns array into string */
         (1) "join" => |values| {
             if let Value::Array(arr) = &values[0] {
                 let mut out = String::new();

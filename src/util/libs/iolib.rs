@@ -70,5 +70,68 @@ pub fn get(state: &mut Interpreter) {
                 return Err(LangError::RuntimeError("Expected string for file path".into()));
             }
         };
+                // Append to a file (creates if not exists)
+        (2) "append" => |args| {
+            if let (Value::String(path), Value::String(data)) = (&args[0], &args[1]) {
+                use std::fs::OpenOptions;
+                use std::io::Write;
+                
+                let mut file = match OpenOptions::new()
+                    .create(true)   // Create if doesn't exist
+                    .append(true)   // Append to end
+                    .open(path) {
+                    Ok(f) => f,
+                    Err(e) => return Err(LangError::RuntimeError(
+                        format!("Could not open file {} for appending: {}", path, e)
+                    )),
+                };
+                
+                match file.write_all(data.as_bytes()) {
+                    Ok(_) => Ok(None),
+                    Err(e) => Err(LangError::RuntimeError(
+                        format!("Failed to append to {}: {}", path, e)
+                    )),
+                }
+            } else {
+                Err(LangError::RuntimeError("Expected (path, data) strings".into()))
+            }
+        };
+
+        // Write with explicit create flag (create(true) is already default for write)
+        // But for clarity, add a function that returns error if file exists
+        (2) "write_new" => |args| {
+            if let (Value::String(path), Value::String(data)) = (&args[0], &args[1]) {
+                use std::fs::OpenOptions;
+                use std::io::Write;
+                
+                let mut file = match OpenOptions::new()
+                    .write(true)
+                    .create_new(true)  // Fails if file exists (like Python 'x')
+                    .open(path) {
+                    Ok(f) => f,
+                    Err(e) => return Err(LangError::RuntimeError(
+                        format!("Could not create new file {}: {}", path, e)
+                    )),
+                };
+                
+                match file.write_all(data.as_bytes()) {
+                    Ok(_) => Ok(None),
+                    Err(e) => Err(LangError::RuntimeError(
+                        format!("Failed to write to {}: {}", path, e)
+                    )),
+                }
+            } else {
+                Err(LangError::RuntimeError("Expected (path, data) strings".into()))
+            }
+        };
+
+        // Check if a file exists
+        (1) "exists" => |args| {
+            if let Value::String(path) = &args[0] {
+                Ok(Some(Value::Boolean(std::path::Path::new(path).exists())))
+            } else {
+                Err(LangError::RuntimeError("Expected path string".into()))
+            }
+        };
     }
 }

@@ -633,51 +633,80 @@ pub fn run(tree: &NodeArena, state: &mut Interpreter) -> Result<Option<Value>, L
             }
         },
         NodeKind::Access(name) => {
-            if let Some(value) = state.variables.get(name) {
-                let value = value.clone();
-                if root.children.len() == 0 {
-                    return Ok(Some(value));
-                } else if root.children.len() == 1 {
-                    // Get nth element of array/string
-                    let index = run(&tree.subtree(root.children[0]), state)?.unwrap_or(Value::Null);
-                    if let Value::Integer(i) = index {
-                        match value {
-                            Value::Array(arr) => {
-                                if i.0 < 0 || i.0 >= arr.len() as i64 {
-                                    return Err(LangError::RuntimeError(
-                                        format!("Index {i} out of bounds for array of length {}", arr.len())
-                                    ))
-                                }
-                                return Ok(Some(arr[i.0 as usize].clone()));
-                            },
-                            Value::String(s) => {
-                                if i.0 < 0 || i.0 >= s.len() as i64 {
-                                    return Err(LangError::RuntimeError(
-                                        format!("Index {i} out of bounds for string of length {}", s.len())
-                                    ))
-                                }
-                                return Ok(Some(Value::String(s.chars().nth(i.0 as usize).unwrap().to_string())));
-                            },
-                            v => return Err(LangError::RuntimeError(
-                                format!("Can't index into {v}")
-                            ))
-                        }
-                    } else {
-                        return Err(LangError::RuntimeError(
-                            "Non-integer index for access node".into()
+    if let Some(value) = state.variables.get(name) {
+        let value = value.clone();
+        if root.children.len() == 0 {
+            return Ok(Some(value));
+        } else if root.children.len() == 1 {
+            // Get nth element of array/string/dict
+            let index = run(&tree.subtree(root.children[0]), state)?.unwrap_or(Value::Null);
+            
+            // Handle indexing
+            match &index {
+                Value::Integer(i) => {
+                    match value {
+                        Value::Array(arr) => {
+                            if i.0 < 0 || i.0 >= arr.len() as i64 {
+                                return Err(LangError::RuntimeError(
+                                    format!("Index {i} out of bounds for array of length {}", arr.len())
+                                ));
+                            }
+                            return Ok(Some(arr[i.0 as usize].clone()));
+                        },
+                        Value::String(s) => {
+                            if i.0 < 0 || i.0 >= s.len() as i64 {
+                                return Err(LangError::RuntimeError(
+                                    format!("Index {i} out of bounds for string of length {}", s.len())
+                                ));
+                            }
+                            return Ok(Some(Value::String(s.chars().nth(i.0 as usize).unwrap().to_string())));
+                        },
+                        Value::Dictionary(dict) => {
+                            // Try to use integer as key
+                            if let Some(val) = dict.get(&Value::Integer(*i)) {
+                                return Ok(Some(val.clone()));
+                            } else {
+                                return Err(LangError::RuntimeError(
+                                    format!("Key {} not found in dictionary", i)
+                                ));
+                            }
+                        },
+                        _ => return Err(LangError::RuntimeError(
+                            format!("Can't index into {:?} with integer", value)
                         ))
                     }
-                } else {
-                    return Err(LangError::RuntimeError(
-                        "Too many children for access node".into()
-                    ))
-                }
-            } else {
-                return Err(LangError::RuntimeError(
-                    format!("Tried to access non-existent variable {name}")
+                },
+                Value::String(s) => {
+                    match value {
+                        Value::Dictionary(dict) => {
+                            if let Some(val) = dict.get(&Value::String(s.clone())) {
+                                return Ok(Some(val.clone()));
+                            } else {
+                                return Err(LangError::RuntimeError(
+                                    format!("Key '{}' not found in dictionary", s)
+                                ));
+                            }
+                        },
+                        _ => return Err(LangError::RuntimeError(
+                            format!("Can't index into {:?} with string", value)
+                        ))
+                    }
+                },
+                _ => return Err(LangError::RuntimeError(
+                    format!("Index must be integer or string, got {:?}", index)
                 ))
             }
-        },
+        } else {
+            return Err(LangError::RuntimeError(
+                "Too many children for access node".into()
+            ));
+        }
+    } else {
+        return Err(LangError::RuntimeError(
+            format!("Tried to access non-existent variable {name}")
+        ));
+    }
+},
         NodeKind::Import(name) => {
             if name.starts_with("!") {
                 libs::import(&name[1..], state)?;
