@@ -291,5 +291,90 @@ pub fn get(state: &mut Interpreter) {
                 Wrapping(hasher.finish() as i64)
             )))
         };
+
+            //* Merge two dictionaries (second overwrites first on key conflicts)
+    (2) "dict_merge" => |args| {
+        if let (Value::Dictionary(dict1), Value::Dictionary(dict2)) = (&args[0], &args[1]) {
+            let mut result = dict1.clone();
+            for (k, v) in dict2.iter() {
+                result.insert(k.clone(), v.clone());
+            }
+            Ok(Some(Value::Dictionary(result)))
+        } else {
+            Err(LangError::RuntimeError("Expected two dictionaries".into()))
+        }
+    };
+
+    //* Set key-value pair (returns new dict)
+    (3) "dict_set" => |args| {
+        if let (Value::Dictionary(dict), key, value) = (&args[0], &args[1], &args[2]) {
+            let mut result = dict.clone();
+            result.insert(key.clone(), value.clone());
+            Ok(Some(Value::Dictionary(result)))
+        } else {
+            Err(LangError::RuntimeError("Expected (dict, key, value)".into()))
+        }
+    };
+
+    //* Get value by key (returns null if not found)
+    (2) "dict_get" => |args| {
+        if let (Value::Dictionary(dict), key) = (&args[0], &args[1]) {
+            Ok(dict.get(key).cloned())
+        } else {
+            Err(LangError::RuntimeError("Expected (dict, key)".into()))
+        }
+    };
+
+    //* Remove key-value pair (returns new dict)
+    (2) "dict_remove" => |args| {
+        if let (Value::Dictionary(dict), key) = (&args[0], &args[1]) {
+            let mut result = dict.clone();
+            result.remove(key);
+            Ok(Some(Value::Dictionary(result)))
+        } else {
+            Err(LangError::RuntimeError("Expected (dict, key)".into()))
+        }
+    };
+
+    //* Check if key exists
+    (2) "dict_has" => |args| {
+        if let (Value::Dictionary(dict), key) = (&args[0], &args[1]) {
+            Ok(Some(Value::Boolean(dict.contains_key(key))))
+        } else {
+            Err(LangError::RuntimeError("Expected (dict, key)".into()))
+        }
+    };
+
+    //* Get all keys
+    (1) "dict_keys" => |args| {
+        if let Value::Dictionary(dict) = &args[0] {
+            let keys: Vec<Value> = dict.keys().cloned().collect();
+            Ok(Some(Value::Array(keys)))
+        } else {
+            Err(LangError::RuntimeError("Expected dictionary".into()))
+        }
+    };
+
+    //* Get all values
+    (1) "dict_values" => |args| {
+        if let Value::Dictionary(dict) = &args[0] {
+            let values: Vec<Value> = dict.values().cloned().collect();
+            Ok(Some(Value::Array(values)))
+        } else {
+            Err(LangError::RuntimeError("Expected dictionary".into()))
+        }
+    };
+
+    //* Get all key-value pairs as array of [key, value] arrays
+    (1) "dict_items" => |args| {
+        if let Value::Dictionary(dict) = &args[0] {
+            let items: Vec<Value> = dict.iter()
+                .map(|(k, v)| Value::Array(vec![k.clone(), v.clone()]))
+                .collect();
+            Ok(Some(Value::Array(items)))
+        } else {
+            Err(LangError::RuntimeError("Expected dictionary".into()))
+        }
+    };
     );
 }
