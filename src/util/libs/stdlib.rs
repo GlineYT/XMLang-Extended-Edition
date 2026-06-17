@@ -122,6 +122,44 @@ pub fn get(state: &mut Interpreter) {
                 }
             };
 
+            //* Modify array at index (returns new array) */
+            (3) "array_modify" => |values| {
+                if let (Value::Array(arr), Value::Integer(index), new_value) = (&values[0], &values[1], &values[2]) {
+                    let idx = index.0 as usize;
+                    if idx >= arr.len() {
+                        return Err(LangError::RuntimeError(
+                            format!("Index {} out of bounds for array of length {}", idx, arr.len())
+                        ));
+                    }
+                    let mut result = arr.clone();
+                    result[idx] = new_value.clone();
+                    Ok(Some(Value::Array(result)))
+                } else {
+                    Err(LangError::RuntimeError(
+                        "Expected (array, integer index, new value)".into()
+                    ))
+                }
+            };
+
+            //* Remove element at index (returns new array) */
+            (2) "array_remove" => |values| {
+                if let (Value::Array(arr), Value::Integer(index)) = (&values[0], &values[1]) {
+                    let idx = index.0 as usize;
+                    if idx >= arr.len() {
+                        return Err(LangError::RuntimeError(
+                            format!("Index {} out of bounds for array of length {}", idx, arr.len())
+                        ));
+                    }
+                    let mut result = arr.clone();
+                    result.remove(idx);
+                    Ok(Some(Value::Array(result)))
+                } else {
+                    Err(LangError::RuntimeError(
+                        "Expected (array, integer index)".into()
+                    ))
+                }
+            };
+
         //* Substrings */
         (3) "substr" => |args| {
             if let (Value::String(s), Value::Integer(start), Value::Integer(end)) = (&args[0], &args[1], &args[2]) {
