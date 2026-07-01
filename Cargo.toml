@@ -1,14 +1,18 @@
 [package]
 name = "xmlang-ee"
-version = "1.0.0"
-authors = ["GamelineYT"]
+version = "1.1.0" 
 edition = "2021"
+authors = ["Gameline <your-email@example.com>"]
+description = "XMLang Extended Edition - A fork of the XML-based esoteric programming language"
+license = "MIT"
+repository = "https://github.com/yourusername/xmlang-ee"
 
 [profile.release]
-opt-level = "z"
-strip = true
-lto = true
-codegen-units = 1
+opt-level = 3          # Maximum optimization
+lto = true             # Link-time optimization (smaller, faster)
+codegen-units = 1      # Better optimization
+strip = true           # Remove debug symbols
+panic = "abort"        # Smaller panic handler
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
