@@ -1,5 +1,6 @@
-This project, it's contributors and maintainers are expected to hold themselves to the SQLite code of ethics as best they can. 
-https://sqlite.org/codeofethics.html
+This project, it's contributors and maintainers are expected to hold themselves to the XEE code of conduct as best they can. 
+
+the CoC is based on the SQLite code of ethics: https://sqlite.org/codeofethics.html
 
 1. First of all, love the Lord God with your whole heart, your whole soul, and your whole strength.
 2. Then, love your neighbor as yourself.
